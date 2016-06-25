@@ -24,7 +24,7 @@ fn main() {
     let master_tree = master_commit.tree().unwrap();
 
     // Iterate through its tree
-    for te in master_tree.iter() { // Why is .iter() needed?
+    for te in &master_tree {
         let entry_name = te.name().unwrap();
         println!("{}", entry_name);
     }
