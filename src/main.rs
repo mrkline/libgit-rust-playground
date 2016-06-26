@@ -3,7 +3,8 @@ extern crate git2;
 use git2::*;
 
 use std::env;
-//use std::iter::IntoIterator;
+
+mod tree;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -24,7 +25,7 @@ fn main() {
     let master_tree = master_commit.tree().unwrap();
 
     // Iterate through its tree
-    for te in &master_tree {
+    for te in tree::walk(master_tree, &repo) {
         let entry_name = te.name().unwrap();
         println!("{}", entry_name);
     }
