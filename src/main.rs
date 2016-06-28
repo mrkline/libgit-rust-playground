@@ -25,13 +25,13 @@ fn main() {
 
     let master_tree = master_commit.tree().unwrap();
 
-    let paths = RefCell::new(Vec::new());
+    let mut paths = Vec::new();
 
     // Iterate through its tree
     tree::walk(master_tree, &repo, |root: &str, element: &TreeEntry|
-               paths.borrow_mut().push(tree::prefix(root, element.name().unwrap())));
+               paths.push(tree::prefix(root, element.name().unwrap())));
 
-    for p in paths.borrow().iter() {
+    for p in paths.iter() {
         println!("{}", p);
     }
 }

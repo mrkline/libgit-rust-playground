@@ -7,8 +7,8 @@ pub fn prefix(root: &str, end: &str) -> String {
     else { [root, end].join("/").to_string() }
 }
 
-fn walk_recursor<F>(t: Tree, root: &str, repo: &Repository, visitor: &F)
-    where F: Fn(&str, &TreeEntry)
+fn walk_recursor<F>(t: Tree, root: &str, repo: &Repository, visitor: &mut F)
+    where F: FnMut(&str, &TreeEntry)
 {
     // Perform a classic, recursive depth-first traversal of the tree.
     for te in &t {
@@ -32,8 +32,8 @@ fn walk_recursor<F>(t: Tree, root: &str, repo: &Repository, visitor: &F)
     }
 }
 
-pub fn walk<F>(t : Tree, repo: &Repository, visitor: F)
-    where F: Fn(&str, &TreeEntry)
+pub fn walk<F>(t : Tree, repo: &Repository, mut visitor: F)
+    where F: FnMut(&str, &TreeEntry)
 {
-    walk_recursor(t, "", repo, &visitor)
+    walk_recursor(t, "", repo, &mut visitor)
 }
