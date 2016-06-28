@@ -3,6 +3,7 @@ extern crate git2;
 use git2::*;
 
 use std::env;
+use std::cell::RefCell;
 
 mod tree;
 
@@ -24,9 +25,13 @@ fn main() {
 
     let master_tree = master_commit.tree().unwrap();
 
+    let paths = RefCell::new(Vec::new());
+
     // Iterate through its tree
-    for te in tree::walk(master_tree, &repo) {
-        let entry_name = te.name().unwrap();
-        println!("{}", entry_name);
+    tree::walk(master_tree, &repo, |root: &str, element: &TreeEntry|
+               paths.borrow_mut().push(tree::prefix(root, element.name().unwrap())));
+
+    for p in paths.borrow().iter() {
+        println!("{}", p);
     }
 }
